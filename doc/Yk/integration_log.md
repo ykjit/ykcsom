@@ -268,8 +268,64 @@ process; `dlsym` against it searches the main binary and its dependencies.
 causes the `if (!dlhandle)` failure check in `_VMClass_load_primitives` to
 falsely report a load failure.  `dlopen(NULL)` returns a proper non-NULL handle.
 
+---
+
+## 4. Yk framework changes
+
+### 4.1 Promote internal-linkage global variables — `llvm/lib/Transforms/Yk/Linkage.cpp`
+
+**What changed.**
+
+```cpp
+// The JIT needs to resolve the addresses of global variables at runtime
+// via dlsym. dlsym can only find symbols that appear in the dynamic symbol
+// table, which requires external linkage. C `static` globals have internal
+// linkage and are therefore invisible to dlsym, so we promote them here.
+for (GlobalVariable &GV : M.globals()) {
+    if (GV.hasInternalLinkage()) {
+        GV.setLinkage(GlobalVariable::ExternalLinkage);
+    }
+}
+```
+
+**Why.**
+CSOM's vtable objects (e.g. `_VMMethod_vtable`, `_VMFrame_vtable`, …) are
+declared `static` at file scope — one per `.c` file — giving them internal
+linkage.  The existing `--export-dynamic` linker flag only exports symbols that
+already have external linkage, and the pre-existing `--yk-linkage` pass only
+promoted *functions*, not global variables.  Consequently the JIT could not
+resolve these vtable addresses via `dlsym`, leaving their `GlobalDecl::eval`
+field `None` and causing an `unwrap()` panic in `GlobalDecl::constval()` at
+trace-compilation time.
+
 **Safety.**
-`is_responsible`, `init_lib`, and `set_primitives` are unchanged.  All `dlsym`
-calls work identically; they now search the executable rather than a `.so` file
-but find the same symbols.  The `init_csp` double-init guard (`static bool
-initialized = false` in `Core.c`) correctly prevents re-initialisation.
+Yk requires LTO, so by the time this pass runs the linker has already merged all
+translation units and assigned every formerly-internal symbol a unique mangled
+name (e.g. `_VMMethod_vtable.llvm.12345`).  Promoting those already-unique
+names to external linkage cannot cause clashes.  LLVM uses `private` linkage
+(not `internal`) for compiler-generated constants such as string literals, so
+`hasInternalLinkage()` leaves them untouched.  The pass runs at link time, after
+all IR-level optimisations, so it cannot interfere with constant-propagation or
+inlining.
+
+---
+
+### 4.2 Skip `@llvm.experimental.noalias.scope.decl` in the IR serialiser — `llvm/lib/YkIR/YkIRWriter.cpp`
+
+```cpp
+// @llvm.experimental.noalias.scope.decl is an optimisation hint emitted for
+// functions in CSOM. It carries a MetadataAsValue operand that the serialiser
+// cannot handle. The intrinsic has no effect on program semantics, so skip it.
+if (I->getIntrinsicID() == Intrinsic::experimental_noalias_scope_decl) {
+    return;
+}
+```
+
+**Why.**
+The Yk IR serialiser encodes every instruction in the AOT bitcode into a compact
+binary format consumed by the Yk runtime.  `@llvm.experimental.noalias.scope.decl`
+is an optimisation hint — it carries aliasing metadata as a `MetadataAsValue`
+operand so that alias-analysis passes can be more precise.  The serialiser has no
+representation for `MetadataAsValue` operands and would crash or emit corrupt IR
+if it encountered the intrinsic.  Because the intrinsic is a pure hint with no
+effect on program semantics or correctness, silently skipping it is safe.
