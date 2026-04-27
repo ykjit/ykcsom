@@ -268,6 +268,36 @@ process; `dlsym` against it searches the main binary and its dependencies.
 causes the `if (!dlhandle)` failure check in `_VMClass_load_primitives` to
 falsely report a load failure.  `dlopen(NULL)` returns a proper non-NULL handle.
 
+---
+
+## 4. Yk framework changes
+
+### 4.1 Promote internal-linkage global variables — `llvm/lib/Transforms/Yk/Linkage.cpp`
+
+**What changed.**
+
+```cpp
+// The JIT needs to resolve the addresses of global variables at runtime
+// via dlsym. dlsym can only find symbols that appear in the dynamic symbol
+// table, which requires external linkage. C `static` globals have internal
+// linkage and are therefore invisible to dlsym, so we promote them here.
+for (GlobalVariable &GV : M.globals()) {
+    if (GV.hasInternalLinkage()) {
+        GV.setLinkage(GlobalVariable::ExternalLinkage);
+    }
+}
+```
+
+**Why.**
+CSOM's vtable objects (e.g. `_VMMethod_vtable`, `_VMFrame_vtable`, …) are
+declared `static` at file scope — one per `.c` file — giving them internal
+linkage.  The existing `--export-dynamic` linker flag only exports symbols that
+already have external linkage, and the pre-existing `--yk-linkage` pass only
+promoted *functions*, not global variables.  Consequently the JIT could not
+resolve these vtable addresses via `dlsym`, leaving their `GlobalDecl::eval`
+field `None` and causing an `unwrap()` panic in `GlobalDecl::constval()` at
+trace-compilation time.
+
 **Safety.**
 `is_responsible`, `init_lib`, and `set_primitives` are unchanged.  All `dlsym`
 calls work identically; they now search the executable rather than a `.so` file
@@ -315,8 +345,6 @@ in the binary's dynamic symbol table.
 ---
 
 ### 4.2 Skip `@llvm.experimental.noalias.scope.decl` in the IR serialiser — `yk-csom/ykllvm/llvm/lib/YkIR/YkIRWriter.cpp`
-
-**What changed.**
 
 A guard was added in `YkIRWriter` alongside the existing stackmap skip:
 
