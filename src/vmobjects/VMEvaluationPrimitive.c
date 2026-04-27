@@ -146,7 +146,7 @@ void _VMEvaluationPrimitive_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-static VTABLE(VMEvaluationPrimitive) _VMEvaluationPrimitive_vtable;
+VTABLE(VMEvaluationPrimitive) _VMEvaluationPrimitive_vtable;
 bool VMEvaluationPrimitive_vtable_inited = false;
 
 VTABLE(VMEvaluationPrimitive)* VMEvaluationPrimitive_vtable(void) {

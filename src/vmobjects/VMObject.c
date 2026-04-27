@@ -200,7 +200,7 @@ void _VMObject_mark_references(void* _self) {
 //
 
 
-static VTABLE(VMObject) _VMObject_vtable;
+VTABLE(VMObject) _VMObject_vtable;
 bool VMObject_vtable_inited = false;
 
 

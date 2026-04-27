@@ -59,7 +59,7 @@ intptr_t _OOObject_object_size(void* _self) {
 
 
 // the VTable
-static VTABLE(OOObject) _OOObject_vtable; 
+VTABLE(OOObject) _OOObject_vtable;
 bool   OOObject_vtable_inited = false;
 
 

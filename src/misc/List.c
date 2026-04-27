@@ -283,7 +283,7 @@ void _List_addAll(void* _self, pList list) {
 //
 
 
-static VTABLE(ListElem) _ListElem_vtable;
+VTABLE(ListElem) _ListElem_vtable;
 bool ListElem_vtable_inited = false;
 
 
@@ -298,7 +298,7 @@ VTABLE(ListElem)* ListElem_vtable(void) {
 }
 
 
-static VTABLE(List) _List_vtable;
+VTABLE(List) _List_vtable;
 bool List_vtable_inited = false;
 
 

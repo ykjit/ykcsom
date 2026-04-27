@@ -146,7 +146,7 @@ const char* _VMSymbol_get_plain_string(void* _self) {
 //
 
 
-static VTABLE(VMSymbol) _VMSymbol_vtable;
+VTABLE(VMSymbol) _VMSymbol_vtable;
 bool VMSymbol_vtable_inited = false;
 
 

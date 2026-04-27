@@ -267,7 +267,7 @@ void _VMMethod_mark_references(void* _self) {
 //
 
 
-static VTABLE(VMMethod) _VMMethod_vtable;
+VTABLE(VMMethod) _VMMethod_vtable;
 bool VMMethod_vtable_inited = false;
 
 

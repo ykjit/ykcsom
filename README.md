@@ -47,6 +47,24 @@ distributed under the MIT License. Please see the LICENSE file for details.
 Additional documentation, detailing for instance the object model and how to
 implement primitives, is available in the `doc` folder.
 
+Yk JIT Build
+------------
+
+CSOM can be built with the [Yk meta-tracing JIT](https://github.com/ykjit/yk)
+enabled. `yk-config` must be on `PATH` (it lives in the Yk build tree under
+`bin/`):
+
+    $ PATH=/path/to/yk/bin:$PATH YK_BUILD_TYPE=debug make -j$(nproc)
+
+Diagnostic environment variables:
+
+- `YKD_LOG=4` — verbose JIT logging
+- `YKD_LOG_STATS=ykstats.json` — write JIT statistics to a JSON file
+
+Example:
+
+    $ YKD_LOG=4 YKD_LOG_STATS=ykstats.json ./CSOM -cp Smalltalk Examples/Hello.som
+
 WebAssembly CSOM
 ----------------
 
@@ -66,6 +84,3 @@ The current build status is: [![Build Status](https://travis-ci.org/SOM-st/CSOM.
 
  [SOM]: http://www.hpi.uni-potsdam.de/hirschfeld/projects/som/
  [SOMst]: https://travis-ci.org/SOM-st/
-
-
-      

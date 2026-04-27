@@ -149,7 +149,7 @@ void _VMPrimitive_mark_references(void* _self) {
 //
 
 
-static VTABLE(VMPrimitive) _VMPrimitive_vtable;
+VTABLE(VMPrimitive) _VMPrimitive_vtable;
 bool VMPrimitive_vtable_inited = false;
 
 

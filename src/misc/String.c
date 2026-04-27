@@ -324,7 +324,7 @@ pString* _String_tokenize(void* _self, size_t* length_of_result /* out param */,
 //
 
 
-static VTABLE(String) _String_vtable;
+VTABLE(String) _String_vtable;
 bool String_vtable_inited = false;
 
 

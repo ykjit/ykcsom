@@ -273,3 +273,75 @@ falsely report a load failure.  `dlopen(NULL)` returns a proper non-NULL handle.
 calls work identically; they now search the executable rather than a `.so` file
 but find the same symbols.  The `init_csp` double-init guard (`static bool
 initialized = false` in `Core.c`) correctly prevents re-initialisation.
+
+---
+
+## 4. Yk-specific fixes
+
+### 4.1 Vtable globals de-static'd — `src/vmobjects/`, `src/misc/`
+
+The `static` storage-class specifier was removed from all 20 vtable globals
+across the CSOM source tree:
+
+```c
+/* before */
+static VTABLE(VMFrame)  _VMFrame_vtable;
+static VTABLE(VMMethod) _VMMethod_vtable;
+/* … and 18 more */
+
+/* after */
+VTABLE(VMFrame)  _VMFrame_vtable;
+VTABLE(VMMethod) _VMMethod_vtable;
+/* … and 18 more */
+```
+
+**Why.**
+The JIT resolves global variable addresses at runtime via `dlsym`.  Only symbols
+with external linkage appear in the dynamic symbol table, so `--export-dynamic`
+cannot export a `static` global.  All 20 vtable globals had internal linkage;
+`dlsym` returned NULL for every one of them, leaving the JIT's `GlobalDecl::eval`
+field `None` and causing an `unwrap()` panic in `GlobalDecl::constval()` at
+trace-compilation time.
+
+Removing `static` gives each vtable external linkage.  `--export-dynamic` then
+exports them into the dynamic symbol table, where `dlsym` finds them normally.
+
+**Safety.**
+Every vtable name in CSOM is unique (e.g. `_VMFrame_vtable`, `_VMMethod_vtable`),
+so removing `static` introduces no ODR violations.  Non-Yk builds are unaffected
+in behaviour; the only visible difference is that the vtable symbols now appear
+in the binary's dynamic symbol table.
+
+---
+
+### 4.2 Skip `@llvm.experimental.noalias.scope.decl` in the IR serialiser — `yk-csom/ykllvm/llvm/lib/YkIR/YkIRWriter.cpp`
+
+**What changed.**
+
+A guard was added in `YkIRWriter` alongside the existing stackmap skip:
+
+```cpp
+// @llvm.experimental.noalias.scope.decl is an optimisation hint emitted for
+// functions in CSOM. It carries a MetadataAsValue operand that the serialiser
+// cannot handle. The intrinsic has no effect on program semantics, so skip it.
+if (I->getIntrinsicID() == Intrinsic::experimental_noalias_scope_decl) {
+    return;
+}
+```
+
+**Why.**
+The Yk IR serialiser encodes every instruction in the AOT bitcode into a compact
+binary format consumed by the Yk runtime.  `@llvm.experimental.noalias.scope.decl`
+is an optimisation hint — it carries aliasing metadata as a `MetadataAsValue`
+operand so that alias-analysis passes can be more precise.  The serialiser has no
+representation for `MetadataAsValue` operands and would crash or emit corrupt IR
+if it encountered the intrinsic.  Because the intrinsic is a pure hint with no
+effect on program semantics or correctness, silently skipping it is safe.
+
+**Safety.**
+Dropping `@llvm.experimental.noalias.scope.decl` has no effect on the
+correctness of JIT-compiled code.  The intrinsic exists solely to inform LLVM's
+alias analysis during AOT compilation; by the time the Yk runtime serialises the
+IR those passes have already run.  The treatment is consistent with how other
+no-semantic-effect intrinsics (e.g. `@llvm.experimental.stackmap`) are handled
+in the same file.

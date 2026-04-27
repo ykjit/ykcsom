@@ -103,7 +103,7 @@ void _VMInteger_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-static VTABLE(VMInteger) _VMInteger_vtable;
+VTABLE(VMInteger) _VMInteger_vtable;
 bool VMInteger_vtable_inited = false;
 
 VTABLE(VMInteger)* VMInteger_vtable(void) {

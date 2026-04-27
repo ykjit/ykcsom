@@ -79,7 +79,7 @@ void _VMInvokable_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-static VTABLE(VMInvokable) _VMInvokable_vtable;
+VTABLE(VMInvokable) _VMInvokable_vtable;
 bool VMInvokable_vtable_inited = false;
 
 VTABLE(VMInvokable)* VMInvokable_vtable(void) {

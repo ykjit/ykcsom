@@ -118,7 +118,7 @@ const size_t _VMString_get_length(void* _self) {
 //
 
 
-static VTABLE(VMString) _VMString_vtable;
+VTABLE(VMString) _VMString_vtable;
 bool VMString_vtable_inited = false;
 
 

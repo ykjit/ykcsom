@@ -307,7 +307,7 @@ void _Hashmap_clear(void* _self) {
 //
 
 
-static VTABLE(HashmapElem) _HashmapElem_vtable;
+VTABLE(HashmapElem) _HashmapElem_vtable;
 bool HashmapElem_vtable_inited = false;
 
 
@@ -324,7 +324,7 @@ VTABLE(HashmapElem)* HashmapElem_vtable(void) {
 }
 
 
-static VTABLE(Hashmap) _Hashmap_vtable;
+VTABLE(Hashmap) _Hashmap_vtable;
 bool Hashmap_vtable_inited = false;
 
 

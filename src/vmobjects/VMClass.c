@@ -630,7 +630,7 @@ void _VMClass_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-static VTABLE(VMClass) _VMClass_vtable;
+VTABLE(VMClass) _VMClass_vtable;
 bool VMClass_vtable_inited = false;
 
 VTABLE(VMClass)* VMClass_vtable(void) {
