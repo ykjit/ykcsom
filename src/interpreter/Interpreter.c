@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "Interpreter.h"
 #include "bytecodes.h"
 
@@ -42,7 +43,7 @@ THE SOFTWARE.
 
 
 // class variable.
-static pVMFrame frame;
+YK_STATIC pVMFrame frame;
 
 // convenience macros for frequently used function invocations
 #define _FRAME Interpreter_get_frame()

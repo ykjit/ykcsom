@@ -52,7 +52,15 @@ THE SOFTWARE.
 
 //TODO: put into own module.
 
-static const uint8_t bytecode_lengths[] = {
+#ifdef USE_YK
+// yk finds globals via dlsym, which only sees symbols with external linkage.
+// Under yk this const is weak: every includer defines it, and the linker
+// keeps a single copy instead of failing on duplicate definitions.
+__attribute__((weak)) const
+#else
+static const
+#endif
+uint8_t bytecode_lengths[] = {
     1, // BC_HALT
     1, // BC_DUP
     3, // BC_PUSH_LOCAL

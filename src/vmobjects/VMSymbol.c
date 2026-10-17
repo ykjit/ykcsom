@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "VMSymbol.h"
 
 #include <memory/gc.h>
@@ -146,7 +147,7 @@ const char* _VMSymbol_get_plain_string(void* _self) {
 //
 
 
-static VTABLE(VMSymbol) _VMSymbol_vtable;
+YK_STATIC VTABLE(VMSymbol) _VMSymbol_vtable;
 bool VMSymbol_vtable_inited = false;
 
 

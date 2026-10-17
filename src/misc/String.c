@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
+#include <misc/yk_linkage.h>
 #include "String.h"
 
 #include <string.h>
@@ -324,7 +325,7 @@ pString* _String_tokenize(void* _self, size_t* length_of_result /* out param */,
 //
 
 
-static VTABLE(String) _String_vtable;
+YK_STATIC VTABLE(String) _String_vtable;
 bool String_vtable_inited = false;
 
 

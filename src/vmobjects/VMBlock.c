@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "VMBlock.h"
 #include "VMEvaluationPrimitive.h"
 
@@ -104,7 +105,7 @@ void _VMBlock_mark_references(void* _self) {
 //
 
 
-static VTABLE(VMBlock) _VMBlock_vtable;
+YK_STATIC VTABLE(VMBlock) _VMBlock_vtable;
 bool VMBlock_vtable_inited = false;
 
 

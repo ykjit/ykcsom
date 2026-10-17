@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
+#include <misc/yk_linkage.h>
 #include "VMInteger.h"
 
 #include <memory/gc.h>
@@ -103,7 +104,7 @@ void _VMInteger_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-static VTABLE(VMInteger) _VMInteger_vtable;
+YK_STATIC VTABLE(VMInteger) _VMInteger_vtable;
 bool VMInteger_vtable_inited = false;
 
 VTABLE(VMInteger)* VMInteger_vtable(void) {

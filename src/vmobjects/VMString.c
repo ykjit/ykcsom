@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "VMString.h"
 
 #include <memory/gc.h>
@@ -118,7 +119,7 @@ const size_t _VMString_get_length(void* _self) {
 //
 
 
-static VTABLE(VMString) _VMString_vtable;
+YK_STATIC VTABLE(VMString) _VMString_vtable;
 bool VMString_vtable_inited = false;
 
 

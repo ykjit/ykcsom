@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
+#include <misc/yk_linkage.h>
 #include "VMArray.h"
 #include "VMObject.h"
 
@@ -177,7 +178,7 @@ void _VMArray_mark_references(void* _self) {
 //
 // The VTABLE-function
 //
-static VTABLE(VMArray) _VMArray_vtable;
+YK_STATIC VTABLE(VMArray) _VMArray_vtable;
 bool VMArray_vtable_inited = false;
 
 VTABLE(VMArray)* VMArray_vtable(void) {

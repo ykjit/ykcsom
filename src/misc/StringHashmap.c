@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
+#include <misc/yk_linkage.h>
 #include "StringHashmap.h"
 
 #include <memory/gc.h>
@@ -157,7 +158,7 @@ void _StringHashmap_put(void* _self, pString key, void* value) {
 //
 
 
-static VTABLE(StringHashmapElem) _StringHashmapElem_vtable;
+YK_STATIC VTABLE(StringHashmapElem) _StringHashmapElem_vtable;
 bool StringHashmapElem_vtable_inited = false;
 
 
@@ -178,7 +179,7 @@ VTABLE(StringHashmapElem)* StringHashmapElem_vtable(void) {
     return &_StringHashmapElem_vtable;
 }
 
-static VTABLE(StringHashmap) _StringHashmap_vtable;
+YK_STATIC VTABLE(StringHashmap) _StringHashmap_vtable;
 bool StringHashmap_vtable_inited = false;
 
 VTABLE(StringHashmap)* StringHashmap_vtable(void) {

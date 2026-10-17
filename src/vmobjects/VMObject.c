@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "VMObject.h"
 #include "VMSymbol.h"
 #include "VMInvokable.h"
@@ -200,7 +201,7 @@ void _VMObject_mark_references(void* _self) {
 //
 
 
-static VTABLE(VMObject) _VMObject_vtable;
+YK_STATIC VTABLE(VMObject) _VMObject_vtable;
 bool VMObject_vtable_inited = false;
 
 

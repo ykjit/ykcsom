@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "VMClass.h"
 #include "VMInvokable.h"
 #include "VMMethod.h"
@@ -484,7 +485,7 @@ bool is_responsible(void* handle, const char* class) {
 #define INSTANCE_METHOD_FORMAT_S "_%s_%s"
 // as in _AClass_anInstanceMethod
 
-static pStringHashmap primitive_map = NULL;
+YK_STATIC pStringHashmap primitive_map = NULL;
 
 void VMClass_init_primitive_map() {
     primitive_map = StringHashmap_new();
@@ -644,7 +645,7 @@ void _VMClass_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-static VTABLE(VMClass) _VMClass_vtable;
+YK_STATIC VTABLE(VMClass) _VMClass_vtable;
 bool VMClass_vtable_inited = false;
 
 VTABLE(VMClass)* VMClass_vtable(void) {

@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
+#include <misc/yk_linkage.h>
 #include "VMMethod.h"
 #include "VMObject.h"
 #include "VMSymbol.h"
@@ -231,7 +232,7 @@ void _VMMethod_mark_references(void* _self) {
 //
 
 
-static VTABLE(VMMethod) _VMMethod_vtable;
+YK_STATIC VTABLE(VMMethod) _VMMethod_vtable;
 bool VMMethod_vtable_inited = false;
 
 
