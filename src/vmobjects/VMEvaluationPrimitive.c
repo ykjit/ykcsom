@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include <misc/yk_linkage.h>
 #include "VMEvaluationPrimitive.h"
 #include "VMInvokable.h"
 #include "VMBlock.h"
@@ -147,7 +146,10 @@ void _VMEvaluationPrimitive_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-YK_STATIC VTABLE(VMEvaluationPrimitive) _VMEvaluationPrimitive_vtable;
+#ifndef USE_YK
+static
+#endif
+VTABLE(VMEvaluationPrimitive) _VMEvaluationPrimitive_vtable;
 bool VMEvaluationPrimitive_vtable_inited = false;
 
 VTABLE(VMEvaluationPrimitive)* VMEvaluationPrimitive_vtable(void) {

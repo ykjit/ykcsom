@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
  
-#include <misc/yk_linkage.h>
 #include "Symboltable.h"
 
 #include "VMSymbol.h"
@@ -33,7 +32,10 @@ THE SOFTWARE.
 #include <misc/StringHashmap.h>
 
 // class variable
-YK_STATIC pStringHashmap symtab;
+#ifndef USE_YK
+static
+#endif
+pStringHashmap symtab;
 
 pVMSymbol Symbol_table_lookup(pString restrict string) {
     return (pVMSymbol)SEND(symtab, get, string);

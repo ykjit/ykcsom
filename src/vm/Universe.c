@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include <misc/yk_linkage.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -103,9 +102,18 @@ static void print_usage_and_exit(const char* executable);
 static int  get_path_class_ext(pString **tokens, pString arg);
 
 //file-local variables
-YK_STATIC pString* class_path=NULL;
-YK_STATIC size_t cp_count=0;
-YK_STATIC pHashmap globals_dictionary=NULL;
+#ifndef USE_YK
+static
+#endif
+pString* class_path=NULL;
+#ifndef USE_YK
+static
+#endif
+size_t cp_count=0;
+#ifndef USE_YK
+static
+#endif
+pHashmap globals_dictionary=NULL;
 
 ///////////////////////////////////
 #pragma mark private hepler functions

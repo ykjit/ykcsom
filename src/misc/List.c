@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-#include <misc/yk_linkage.h>
 #include <stdlib.h>
 #include "List.h"
 
@@ -284,7 +283,10 @@ void _List_addAll(void* _self, pList list) {
 //
 
 
-YK_STATIC VTABLE(ListElem) _ListElem_vtable;
+#ifndef USE_YK
+static
+#endif
+VTABLE(ListElem) _ListElem_vtable;
 bool ListElem_vtable_inited = false;
 
 
@@ -299,7 +301,10 @@ VTABLE(ListElem)* ListElem_vtable(void) {
 }
 
 
-YK_STATIC VTABLE(List) _List_vtable;
+#ifndef USE_YK
+static
+#endif
+VTABLE(List) _List_vtable;
 bool List_vtable_inited = false;
 
 

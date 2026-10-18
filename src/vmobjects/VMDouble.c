@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include <misc/yk_linkage.h>
 #include "VMDouble.h"
 
 #include <memory/gc.h>
@@ -95,7 +94,10 @@ void _VMDouble_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-YK_STATIC VTABLE(VMDouble) _VMDouble_vtable;
+#ifndef USE_YK
+static
+#endif
+VTABLE(VMDouble) _VMDouble_vtable;
 bool VMDouble_vtable_inited = false;
 
 VTABLE(VMDouble)* VMDouble_vtable(void) {

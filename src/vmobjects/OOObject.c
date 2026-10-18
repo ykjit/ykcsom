@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-#include <misc/yk_linkage.h>
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -60,7 +59,10 @@ intptr_t _OOObject_object_size(void* _self) {
 
 
 // the VTable
-YK_STATIC VTABLE(OOObject) _OOObject_vtable; 
+#ifndef USE_YK
+static
+#endif
+VTABLE(OOObject) _OOObject_vtable; 
 bool   OOObject_vtable_inited = false;
 
 

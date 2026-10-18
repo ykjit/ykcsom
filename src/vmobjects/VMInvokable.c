@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
   */
 
-#include <misc/yk_linkage.h>
 #include "VMInvokable.h"
 #include "VMMethod.h"
 #include "VMPrimitive.h"
@@ -80,7 +79,10 @@ void _VMInvokable_mark_references(void* _self) {
 // The VTABLE-function
 //
 //
-YK_STATIC VTABLE(VMInvokable) _VMInvokable_vtable;
+#ifndef USE_YK
+static
+#endif
+VTABLE(VMInvokable) _VMInvokable_vtable;
 bool VMInvokable_vtable_inited = false;
 
 VTABLE(VMInvokable)* VMInvokable_vtable(void) {
