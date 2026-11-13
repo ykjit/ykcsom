@@ -1,0 +1,7 @@
+comment = "ykcsom-main"
+
+[executors]
+csom = "~/CSOM/CSOM"
+
+[suite_env.awfy]
+SOM_LIB = "~/CSOM/Smalltalk"

@@ -1,0 +1,7 @@
+comment = "ykcsom-fork_yk-bytecode-dispatch ~ 5e5786be9bd55358b5ddcacf630e5b4f6d7bb056"
+
+[executors]
+csom = "/home/pd/ykcsom-fork/CSOM-yk"
+
+[suite_env.awfy]
+SOM_LIB = "/home/pd/ykcsom-fork/Smalltalk"
