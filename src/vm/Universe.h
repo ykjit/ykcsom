@@ -43,6 +43,7 @@ THE SOFTWARE.
 #ifdef USE_YK
 #include <yk.h>
 extern YkMT* yk_mt;
+extern uintptr_t globals_version;
 #endif
 
 /*  Global objects  */

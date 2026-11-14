@@ -793,7 +793,15 @@ pVMObject Universe_get_global(pVMSymbol name) {
 }
 
 
+#ifdef USE_YK
+uintptr_t globals_version = 0;
+#endif
+
 void Universe_set_global(pVMSymbol name, pVMObject value) {
+#ifdef USE_YK
+    if(Universe_has_global(name))
+        globals_version++;
+#endif
     // Insert the given value into the dictionary of globals
     SEND(globals_dictionary, put, name, value);
 }

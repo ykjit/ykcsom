@@ -103,6 +103,13 @@ static int64_t idempotent_lookup_field_index(pVMClass cls, pVMSymbol name) {
     // class fields never change after it is created.
     return cls->_vtable->lookup_field_index(cls, name);
 }
+
+__attribute__((yk_idempotent, noinline))
+static uintptr_t idempotent_get_global(pVMSymbol name, uintptr_t version) {
+    NOOPT_VAL(name);
+    NOOPT_VAL(version);
+    return (uintptr_t)Universe_get_global(name);
+}
 #endif
 
 
@@ -234,8 +241,15 @@ static void do_push_global(size_t bytecode_index) {
                                             get_constant, bytecode_index);
         
     // Get the global from the Universe
+#ifdef USE_YK
+    pVMObject global = (pVMObject)idempotent_get_global(
+        yk_promote(global_name), yk_promote(globals_version));
+    if(global == NULL)
+        global = Universe_get_global(global_name);
+#else
     pVMObject global = Universe_get_global(global_name);
-        
+#endif
+
     if(global != NULL)
         // Push the global onto the stack
         SEND(_FRAME, push, global);
